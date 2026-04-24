@@ -1,13 +1,12 @@
-import { flow } from "fp-ts/function"
-import * as A from "fp-ts/Array"
+import { pipe } from "effect/Function"
 
-const pairs = <A, B>(xs: A[], ys: B[]) =>
-  flow(
-    A.flatMap(x =>
-      flow(
-        A.flatMap(y => A.of([x, y] as const))
-      )(ys)
-    )
-  )(xs)
+type IO<A> = () => A
+const toConsole = (message: string): IO<string> =>
+  () => {
+    console.log(message + `\n`)
+    return message
+  }
 
-console.log(pairs([1, 2, 3], ['a', 'b', 'c']))
+const sayHello = pipe('Hello, Functional Programming', toConsole)
+
+sayHello()
